@@ -1,3 +1,12 @@
+# Add and update the community repo
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+# Install just the CRDs
+helm install prometheus-crds prometheus-community/prometheus-operator-crds \
+  --namespace monitoring \
+  --create-namespace
+
 hr.12w.ir/lqi/prometheus/node-exporter:v1.11.1-distroless
 hr.12w.ir/lqi/kiwigrid/k8s-sidecar:2.7.3
 hr.12w.ir/docker-hub/grafana/grafana:13.0.1-security-01

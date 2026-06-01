@@ -1,0 +1,22 @@
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: 192.168.100.105
+  bindPort: 6443
+---
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+kubernetesVersion: stable
+imageRepository: hr.12w.ir/lk8
+networking:
+  podSubnet: 10.244.0.0/16 
+apiServer:
+  certSANs:
+    - "192.168.100.105"
+    - "192.168.100.8"
+    - "192.168.100.4"
+    - "kctl.12w.ir"
+    - "kiara.api.12w.ir"
+    - "api.kiara.12w.ir"
+    - "127.0.0.1"
+    - "localhost"

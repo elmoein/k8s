@@ -1,2 +1,2 @@
 # k8s
-this my jorna
+this my jora

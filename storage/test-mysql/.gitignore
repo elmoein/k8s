@@ -1,0 +1,20 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/server
+/app
+
+# Go workspace
+go.work
+
+# Fiber / Temp files
+tmp/
+.env
+
+# OS specific
+.DS_Store
+.AppleDouble
+.LSOverride

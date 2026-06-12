@@ -1,0 +1,9 @@
+hostname: web.12w.ir
+tls: external
+
+networkExposure:
+  type: "none"
+
+replicas: 1
+
+systemDefaultRegistry: "hr.12w.ir/arv"

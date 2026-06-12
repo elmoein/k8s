@@ -1,0 +1,46 @@
+name: Build and Push Image
+on:
+  push:
+    branches:
+    - main
+
+env:
+  FULL_IMAGE: hr.12w.ir/app/mysql/test
+  GIT_HOST: git.12w.ir
+  REGISTRY_HOST: hr.12w.ir
+
+defaults:
+  run:
+    shell: sh
+
+jobs:
+  build-and-push:
+    runs-on: dind
+    steps:
+    - name: Checkout code
+      run: |
+        git clone https://oauth2:${{ secrets.GITEA_TOKEN }}@${{ env.GIT_HOST }}/moein/test-mysql.git .
+        git checkout ${{ github.sha }}
+
+    - name: Login to Registry
+      run: |
+        echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ env.REGISTRY_HOST }} \
+          -u ${{ secrets.REGISTRY_USER }} --password-stdin
+
+    - name: Calculate Short SHA and Set Variables
+      run: |
+        echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+
+    - name: Build and Push Docker image
+      env:
+        DOCKER_BUILDKIT: 1
+      run: |
+        docker build \
+          --build-arg BUILDKIT_INLINE_CACHE=1 \
+          --cache-from ${{ env.FULL_IMAGE }}:latest \
+          --tag ${{ env.FULL_IMAGE }}:${{ env.SHORT_SHA }} \
+          --tag ${{ env.FULL_IMAGE }}:latest \
+          .
+        
+        docker push ${{ env.FULL_IMAGE }}:${{ env.SHORT_SHA }}
+        docker push ${{ env.FULL_IMAGE }}:latest
